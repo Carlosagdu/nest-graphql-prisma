@@ -1,0 +1,9 @@
+
+> proyecto-nest-graphql-prisma@0.0.1 start C:\Users\TIRESIA\Documents\Tutoriales\proyecto-nest-graphql-prisma
+> nest start
+
+[32m[Nest] 6632   - [39m02/23/2021, 8:06:55 AM   [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 6632   - [39m02/23/2021, 8:06:55 AM   [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +155ms[39m
+[32m[Nest] 6632   - [39m02/23/2021, 8:06:55 AM   [38;5;3m[InstanceLoader] [39m[32mGraphQLSchemaBuilderModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 6632   - [39m02/23/2021, 8:06:55 AM   [38;5;3m[InstanceLoader] [39m[32mGraphQLModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 6632   - [39m02/23/2021, 8:06:56 AM   [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +1022ms[39m
