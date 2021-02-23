@@ -33,6 +33,16 @@ export class PostResolver {
     })
     }
 
+    //Display published posts
+    @Query(returns => [Post], {nullable: true})
+    async feed(): Promise<Post[]> {
+        return this.prismaService.post.findMany({
+            where: {
+                published: true,
+            }
+        })
+    }
+
     //Mutation resolver
     //Create draft
     @Mutation( returns => Post, { nullable: true})
@@ -49,7 +59,19 @@ export class PostResolver {
                 }
             }
         })
+    }
 
+    //Publish draft
+    @Mutation( returns => Post, {nullable: true})
+    async publish(@Args("id") id: number): Promise<Post | null>{
+        return this.prismaService.post.update({
+            where:{
+                id: id
+            },
+            data: {
+                published: true,
+            }
+        })
     }
 
 }

@@ -29,12 +29,14 @@ type Query {
 
   """get post by Id"""
   post(id: Float!): Post
+  feed: [Post!]
 }
 
 type Mutation {
   """Create a new user"""
   signUpUser(data: SignUpUserInput!): User!
   createDraft(draftData: DraftDataInput!): Post
+  publish(id: Float!): Post
 }
 
 """New User Input"""
