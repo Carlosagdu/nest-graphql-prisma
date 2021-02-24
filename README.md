@@ -17,16 +17,25 @@ The technologies used for this API are:
 ## Set Up
 ***Please be aware that you MUST set up your own DATABASEURL environment variable for the proper working order.*** \
 You can initialize a .env file and store the DATABASEURL env variable in it. \
-The nest CLI will initialize the env variables in the .env file. \
+The Prisma CLI will initialize the env variables in the .env file. \
 
 To run this project. First clone the repository locally using:
 ```
 git clone [repositoryurl]
 ```
 
-then you can run:
+To install dependencies you must run:
 ```
 npm install
+```
+To enable prisma to apply the schema on schema.prisma to the database schema you can run:
+```
+npx prisma migrate dev --preview-feature
+```
+
+Finally you can start the API using
+```
 npm run start:dev
 ```
 
+Now everything is set up :fire:
