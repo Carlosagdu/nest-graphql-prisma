@@ -1,7 +1,7 @@
 import { Args, Context, Mutation, Query, ResolveField, Resolver, Root } from "@nestjs/graphql";
 import { User, SignUpUserInput } from './user';
 import {PrismaService} from "../prisma.service"
-import { Inject } from "@nestjs/common";
+import { Inject, NotFoundException, UsePipes, ValidationPipe } from "@nestjs/common";
 import { Post } from "src/post/post";
 
 @Resolver(of => User)
@@ -33,14 +33,21 @@ export class UserResolver {
         @Args("id") id: number,
         @Context() ctx
     ): Promise<User>{
-        return this.prismaService.user.findUnique(
+        //Look for a user where the ID matches
+        const userFound = await this.prismaService.user.findUnique(
             {
                 where: { id: id}
-            })
+            }
+        );
+        //if there isn´t an user, throw not found exception
+        if(!userFound) throw new NotFoundException(`User with ID ${id} not found.`)
+        //otherwise, retrieve the found user
+        return userFound;
     }
 
     //Mutation resolver
     @Mutation(returns => User, {description: "Create a new user"})
+    @UsePipes(ValidationPipe)
     async signUpUser(
         //argument from the query must be SignUpUser type
         @Args("data") data: SignUpUserInput, 

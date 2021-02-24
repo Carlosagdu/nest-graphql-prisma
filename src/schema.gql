@@ -24,18 +24,24 @@ type Query {
   """get one user by id"""
   user(id: Float!): User!
 
-  """It returns all post published"""
+  """It returns all post"""
   posts: [Post!]!
 
   """get post by Id"""
   post(id: Float!): Post
+
+  """It returns all post where published is true"""
   feed: [Post!]
 }
 
 type Mutation {
   """Create a new user"""
   signUpUser(data: SignUpUserInput!): User!
+
+  """Create a draft for a user"""
   createDraft(draftData: DraftDataInput!): Post
+
+  """Enable the published post property to true"""
   publish(id: Float!): Post
 }
 
@@ -45,6 +51,7 @@ input SignUpUserInput {
   email: String!
 }
 
+"""New Draft Input"""
 input DraftDataInput {
   title: String!
   content: String!

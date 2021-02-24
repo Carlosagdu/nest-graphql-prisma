@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import { ObjectType, Field, ID, InputType } from '@nestjs/graphql'
 import { User } from '../user/user'
-import { IsEmail } from 'class-validator'
+import { IsEmail, IsNotEmpty } from 'class-validator'
 
 @ObjectType()
 export class Post {
@@ -21,9 +21,10 @@ export class Post {
   author?: User | null
 }
 
-@InputType()
+@InputType({description:"New Draft Input"})
 export class DraftDataInput {
   @Field({nullable: false})
+  @IsNotEmpty()
   title: string
   
   @Field( type => String)
@@ -34,8 +35,3 @@ export class DraftDataInput {
   authorEmail: string
 
 }
-
-
-// @Args('title') title: string,
-//     @Args('content', { nullable: true }) content: string,
-//     @Args('authorEmail') authorEmail: string,
