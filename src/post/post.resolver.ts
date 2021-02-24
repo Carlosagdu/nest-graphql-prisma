@@ -34,7 +34,7 @@ export class PostResolver {
   }
 
   //Queries resolver
-  //posts()
+  //posts: [Post!]!
   @Query((returns) => [Post], {
     name: 'posts',
     description: 'It returns all post',
@@ -43,7 +43,7 @@ export class PostResolver {
     return this.prismaService.post.findMany();
   }
 
-  //post(id)
+  //post(id: Float!): Post
   @Query((returns) => Post, {
     name: 'post',
     nullable: true,
@@ -60,26 +60,25 @@ export class PostResolver {
     return foundPost;
   }
 
-  //Display published posts
+  //feed: [Post!]
   @Query((returns) => [Post], {
     description: 'It returns all post where published is true',
     nullable: true,
   })
   async feed(): Promise<Post[]> {
-    const foundPosts= await this.prismaService.post.findMany({
+    const foundPosts = await this.prismaService.post.findMany({
       where: {
         published: true,
       },
     });
     //If there aren´t published posts throw not found exception
-    if(!foundPosts) throw new NotFoundException("Published posts not found")
+    if (!foundPosts) throw new NotFoundException('Published posts not found');
     //Otherwise, return the found Posts
-    return foundPosts
-
+    return foundPosts;
   }
 
   //Mutation resolver
-  //Create draft
+  //createDraft(draftData: DraftDataInput!): Post
   @Mutation((returns) => Post, {
     description: 'Create a draft for a user',
     nullable: true,
@@ -100,7 +99,7 @@ export class PostResolver {
     });
   }
 
-  //Publish draft
+  //publish(id: Float!): Post
   @Mutation((returns) => Post, {
     description: 'Enable the published post property to true',
     nullable: true,
@@ -112,6 +111,18 @@ export class PostResolver {
       },
       data: {
         published: true,
+      },
+    });
+  }
+
+  @Mutation((returns) => Post, {
+    description: 'It deletes a post with specific ID',
+    nullable: true,
+  })
+  async deletePostById(@Args('id') id: number, @Context() ctx): Promise<Post> {
+    return this.prismaService.post.delete({
+      where: {
+        id: id,
       },
     });
   }
