@@ -35,9 +35,6 @@ type Query {
 }
 
 type Mutation {
-  """Create a new user"""
-  signUpUser(data: SignUpUserInput!): User
-
   """It deletes a user with specific ID"""
   deleteUser(id: Float!): User
 
@@ -49,12 +46,6 @@ type Mutation {
 
   """It deletes a post with specific ID"""
   deletePostById(id: Float!): Post
-}
-
-"""New User Input"""
-input SignUpUserInput {
-  name: String!
-  email: String!
 }
 
 """New Draft Input"""

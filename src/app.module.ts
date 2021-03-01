@@ -4,6 +4,8 @@ import { join } from 'path';
 import { PostResolver } from './post/post.resolver';
 import { PrismaService } from './prisma.service';
 import { UserResolver } from './user/user.resolver';
+import { PostService } from './post/post.service';
+import { UserService } from './user/user.service';
 
 @Module({
   imports: [
@@ -12,6 +14,6 @@ import { UserResolver } from './user/user.resolver';
     })
   ],
   controllers: [],
-  providers: [PrismaService,UserResolver, PostResolver],
+  providers: [PrismaService,UserResolver, PostResolver, PostService, UserService],
 })
 export class AppModule {}
