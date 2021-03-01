@@ -1,5 +1,4 @@
 import {
-  NotFoundException,
   Inject,
   UsePipes,
   ValidationPipe,
@@ -13,14 +12,15 @@ import {
   Resolver,
   Root,
 } from '@nestjs/graphql';
-import { User } from '../user/user';
-import { DraftDataInput, Post } from './post';
+import { User } from '../user/user.model';
+import { Post } from './post.model';
+import {DraftDataInput} from "./dto/draftdata.input"
 import { PostService } from './post.service';
 
 @Resolver((of) => Post)
 export class PostResolver {
   //Instance of the prisma service
-  constructor(@Inject(PostService) private postService: PostService) {}
+  constructor(@Inject(PostService) private readonly postService: PostService) {}
 
   @ResolveField()
   async author(@Root() post: Post): Promise<User | null> {

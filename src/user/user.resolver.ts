@@ -7,21 +7,17 @@ import {
   Resolver,
   Root,
 } from '@nestjs/graphql';
-import { User} from './user';
-import { PrismaService } from '../prisma.service';
+import { User} from './user.model';
 import {
   Inject,
-  NotFoundException,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
-import { Post } from 'src/post/post';
+import { Post } from 'src/post/post.model';
 import { UserService } from './user.service';
 
 @Resolver((of) => User)
 export class UserResolver {
   //Instance of the prisma service
-  constructor(@Inject(UserService) private userService: UserService) {}
+  constructor(@Inject(UserService) private readonly userService: UserService) {}
 
   //Field resolver
   @ResolveField()
@@ -43,26 +39,6 @@ export class UserResolver {
   async user(@Args('id') id: number, @Context() ctx): Promise<User> {
     return this.userService.getUserById(id);
   }
-
-  //Mutation resolver
-  //signUpUser(data: SignUpUserInput): User
-  // @Mutation((returns) => User, {
-  //   description: 'Create a new user',
-  //   nullable: true,
-  // })
-  // @UsePipes(ValidationPipe)
-  // async signUpUser(
-  //   //argument from the query must be SignUpUser type
-  //   @Args('data') data: SignUpUserInput,
-  //   @Context() ctx,
-  // ): Promise<User> {
-  //   return this.prismaService.user.create({
-  //     data: {
-  //       email: data.email,
-  //       name: data.name,
-  //     },
-  //   });
-  // }
 
   //Mutation Resolver
   //deleteUser(id: Float!): User
