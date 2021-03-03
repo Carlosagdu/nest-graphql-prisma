@@ -1,21 +1,31 @@
-import { Resolver,  Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Context } from '@nestjs/graphql';
+import { Response } from 'express';
 import { AuthService } from './auth.service';
-import { Auth } from './auth.model';
-import {SignUpInput} from "./dto/signup.input"
+import { UserToken } from './userToken.model';
+import { SignUpInput } from './dto/signup.input';
+import { UsePipes, ValidationPipe } from '@nestjs/common';
+import { LoginInput } from './dto/login.input';
 
-@Resolver((of) => Auth)
+@Resolver('Auth')
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
-  @Mutation( returns => Auth)
-  async signup(@Args("data") data: SignUpInput){
-    data.email = data.email.toLowerCase();
-    const { accessToken, refreshToken } = await this.authService.createUser(data);
-    return {
-      accessToken,
-      refreshToken
-    }
-
+  @Mutation((returns) => UserToken)
+  @UsePipes(ValidationPipe)
+  signup(
+    @Args('signUpInput') signUpInput: SignUpInput,
+    @Context() res: Response,
+  ) {
+    signUpInput.email = signUpInput.email.toLowerCase();
+    return this.authService.signUp(signUpInput, res);
   }
 
+  @Mutation((returns) => UserToken)
+  @UsePipes(ValidationPipe)
+  login(
+    @Args('loginInput') loginInput: LoginInput,
+    @Context() res: Response,
+  ) {
+    return this.authService.login(loginInput, res)
+  }
 }

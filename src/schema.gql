@@ -17,6 +17,11 @@ type User {
   posts: [Post!]
 }
 
+type UserToken {
+  token: String!
+  user: User!
+}
+
 type Query {
   """It returns all registered users"""
   users: [User!]!
@@ -35,6 +40,9 @@ type Query {
 }
 
 type Mutation {
+  signup(signUpInput: SignUpInput!): UserToken!
+  login(loginInput: LoginInput!): UserToken!
+
   """It deletes a user with specific ID"""
   deleteUser(id: Float!): User
 
@@ -46,6 +54,18 @@ type Mutation {
 
   """It deletes a post with specific ID"""
   deletePostById(id: Float!): Post
+}
+
+"""New User Input"""
+input SignUpInput {
+  name: String!
+  email: String!
+  password: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }
 
 """New Draft Input"""
