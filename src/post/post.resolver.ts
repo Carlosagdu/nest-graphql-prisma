@@ -63,7 +63,6 @@ export class PostResolver {
   @UsePipes(ValidationPipe)
   async createDraft(
     @Args('draftData') draftData: DraftDataInput,
-    @Context() ctx,
   ): Promise<Post> {
     return this.postService.createDraft(
       draftData.title,
@@ -85,7 +84,7 @@ export class PostResolver {
     description: 'It deletes a post with specific ID',
     nullable: true,
   })
-  async deletePostById(@Args('id') id: number, @Context() ctx): Promise<Post> {
+  async deletePostById(@Args('id') id: number): Promise<Post> {
     return this.postService.deletePostById(id);
   }
 }

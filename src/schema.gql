@@ -23,6 +23,8 @@ type UserToken {
 }
 
 type Query {
+  whoAmI: User!
+
   """It returns all registered users"""
   users: [User!]!
 

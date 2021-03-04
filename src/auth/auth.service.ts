@@ -15,7 +15,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  signUp = async (input: SignUpInput, res): Promise<UserToken> => {
+  signUp = async (input: SignUpInput): Promise<UserToken> => {
     const foundUser = await this.lookForUserByEmail(input.email);
     if(foundUser){
       throw new BadRequestException(`The email ${input.email} is already in use`)
@@ -34,13 +34,12 @@ export class AuthService {
     });
 
     const jwt = this.jwtService.sign({ id: createdUser.id });
-    res.cookie('token', jwt, { httpOnly: true });
 
     return { user: createdUser, token: jwt };
   };
 
-  validateUser = (userId: number): Promise<User> => {
-    return this.prismaService.user.findUnique({ where: { id: userId } });
+  validateUser = async (userId: number) => {
+    return this.prismaService.user.findUnique({ where: { id: userId }, });
   };
 
   lookForUserByEmail = async (userEmail: string):Promise<User> => {
@@ -49,7 +48,7 @@ export class AuthService {
     });
   };
 
-  login = async (input: LoginInput, res): Promise<UserToken> => {
+  login = async (input: LoginInput): Promise<UserToken> => {
     const foundUser = await this.lookForUserByEmail(input.email);
     if(!foundUser){
       throw new NotFoundException(`This email is not registered`)
@@ -61,7 +60,6 @@ export class AuthService {
     }
 
     const jwt = this.jwtService.sign({id: foundUser.id});
-    res.cookie('token', jwt , { httpOnly: true });
 
     return {user: foundUser, token: jwt}
 

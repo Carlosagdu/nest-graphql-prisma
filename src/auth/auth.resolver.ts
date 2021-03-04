@@ -1,31 +1,41 @@
-import { Resolver, Mutation, Args, Context } from '@nestjs/graphql';
-import { Response } from 'express';
+import { Resolver, Mutation, Args, Context, Query } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { UserToken } from './userToken.model';
 import { SignUpInput } from './dto/signup.input';
-import { UsePipes, ValidationPipe } from '@nestjs/common';
+import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { LoginInput } from './dto/login.input';
+import { User } from 'src/user/user.model';
+import { UserService } from 'src/user/user.service';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { CurrentUser } from './decorator/currentUser.decorator';
 
 @Resolver('Auth')
 export class AuthResolver {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService
+    ) {}
 
   @Mutation((returns) => UserToken)
   @UsePipes(ValidationPipe)
   signup(
     @Args('signUpInput') signUpInput: SignUpInput,
-    @Context() res: Response,
   ) {
     signUpInput.email = signUpInput.email.toLowerCase();
-    return this.authService.signUp(signUpInput, res);
+    return this.authService.signUp(signUpInput);
   }
 
   @Mutation((returns) => UserToken)
   @UsePipes(ValidationPipe)
   login(
     @Args('loginInput') loginInput: LoginInput,
-    @Context() res: Response,
   ) {
-    return this.authService.login(loginInput, res)
+    return this.authService.login(loginInput);
+  }
+
+  @Query(returns => User)
+  @UseGuards(JwtAuthGuard)
+  whoAmI(@CurrentUser() user: User){
+    return this.userService.getUserById(user.id)
   }
 }

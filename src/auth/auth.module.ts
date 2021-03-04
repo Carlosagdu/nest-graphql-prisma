@@ -7,7 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { GqlAuthGuard } from './guards/graphql-auth.guard';
+import { UserService } from 'src/user/user.service';
 
 @Module({
   imports: [
@@ -23,8 +23,8 @@ import { GqlAuthGuard } from './guards/graphql-auth.guard';
     JwtStrategy,
     PasswordService,
     PrismaService,
-    GqlAuthGuard,
+    UserService
   ],
-  exports: [GqlAuthGuard]
+  exports: [JwtModule]
 })
 export class AuthModule {}
