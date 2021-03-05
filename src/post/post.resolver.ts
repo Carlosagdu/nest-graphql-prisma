@@ -23,7 +23,7 @@ export class PostResolver {
   constructor(@Inject(PostService) private readonly postService: PostService) {}
 
   @ResolveField()
-  async author(@Root() post: Post): Promise<User | null> {
+  async author(@Root() post: Post) {
     return this.postService.authorField(post.id);
   }
 

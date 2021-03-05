@@ -9,7 +9,7 @@ import {
 } from '@nestjs/graphql';
 import { User} from './user.model';
 import {
-  Inject, UseGuards,
+  Inject
 } from '@nestjs/common';
 import { Post } from 'src/post/post.model';
 import { UserService } from './user.service';
@@ -30,14 +30,14 @@ export class UserResolver {
   @Query((returns) => [User], {
     description: 'It returns all registered users',
   })
-  async users(): Promise<User[]> {
+  async users(){
     return this.userService.getAllUsers();
   }
 
   //user(id: Float!): User!
   @Query((returns) => User, { description: 'get one user by id' })
-  async user(@Args('id') id: number): Promise<User> {
-    return this.userService.getUserById(id);
+  async user(@Args('id') id: number) {
+    // return this.userService.getUserById(id);
   }
 
   //Mutation Resolver
@@ -46,7 +46,7 @@ export class UserResolver {
     description: 'It deletes a user with specific ID',
     nullable: true,
   })
-  async deleteUser(@Args('id') id: number): Promise<User> {
-    return this.userService.deleteUserById(id);
+  async deleteUser(@Args('id') id: number) {
+    // return this.userService.deleteUserById(id);
   }
 }

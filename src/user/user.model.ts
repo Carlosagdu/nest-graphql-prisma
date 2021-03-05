@@ -1,6 +1,18 @@
 import 'reflect-metadata'
-import { ObjectType, Field, ID, HideField } from '@nestjs/graphql'
+import { ObjectType, Field, ID, HideField, registerEnumType } from '@nestjs/graphql'
 import { Post } from "../post/post.model"
+
+export enum Role {
+  ADMINISTRATOR="ADMINISTRATOR",
+  MANAGER="MANAGER",
+  SUPERVISOR="SUPERVISOR",
+  EMPLOYEE="CLOSED"
+}
+
+registerEnumType(Role, {
+  name: "Role",
+  description: "Allowed roles for users"
+})
 
 @ObjectType()
 export class User {
@@ -18,6 +30,8 @@ export class User {
 
   @HideField()
   password: string
-}
 
+  @Field(type => Role)
+  role: Role
+}
 

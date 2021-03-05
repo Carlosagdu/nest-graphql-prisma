@@ -22,20 +22,20 @@ export class AuthResolver {
     @Args('signUpInput') signUpInput: SignUpInput,
   ) {
     signUpInput.email = signUpInput.email.toLowerCase();
-    return this.authService.signUp(signUpInput);
+    return this.authService.signUp(signUpInput)
   }
 
-  @Mutation((returns) => UserToken)
-  @UsePipes(ValidationPipe)
-  login(
-    @Args('loginInput') loginInput: LoginInput,
-  ) {
-    return this.authService.login(loginInput);
-  }
+  // @Mutation((returns) => UserToken)
+  // @UsePipes(ValidationPipe)
+  // login(
+  //   @Args('loginInput') loginInput: LoginInput,
+  // ) {
+  //   return this.authService.login(loginInput);
+  // }
 
-  @Query(returns => User)
-  @UseGuards(JwtAuthGuard)
-  whoAmI(@CurrentUser() user: User){
-    return this.userService.getUserById(user.id)
-  }
+  // @Query(returns => User)
+  // @UseGuards(JwtAuthGuard)
+  // whoAmI(@CurrentUser() user: User){
+  //   return this.userService.getUserById(user.id)
+  // }
 }

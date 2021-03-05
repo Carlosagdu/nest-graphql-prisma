@@ -15,6 +15,15 @@ type User {
   email: String!
   name: String
   posts: [Post!]
+  role: Role!
+}
+
+"""Allowed roles for users"""
+enum Role {
+  ADMINISTRATOR
+  MANAGER
+  SUPERVISOR
+  EMPLOYEE
 }
 
 type UserToken {
@@ -23,8 +32,6 @@ type UserToken {
 }
 
 type Query {
-  whoAmI: User!
-
   """It returns all registered users"""
   users: [User!]!
 
@@ -43,7 +50,6 @@ type Query {
 
 type Mutation {
   signup(signUpInput: SignUpInput!): UserToken!
-  login(loginInput: LoginInput!): UserToken!
 
   """It deletes a user with specific ID"""
   deleteUser(id: Float!): User
@@ -61,11 +67,6 @@ type Mutation {
 """New User Input"""
 input SignUpInput {
   name: String!
-  email: String!
-  password: String!
-}
-
-input LoginInput {
   email: String!
   password: String!
 }
