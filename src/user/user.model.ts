@@ -3,10 +3,10 @@ import { ObjectType, Field, ID, HideField, registerEnumType } from '@nestjs/grap
 import { Post } from "../post/post.model"
 
 export enum Role {
-  ADMINISTRATOR="ADMINISTRATOR",
-  MANAGER="MANAGER",
-  SUPERVISOR="SUPERVISOR",
-  EMPLOYEE="CLOSED"
+  ADMINISTRATOR='ADMINISTRATOR',
+  MANAGER='MANAGER',
+  SUPERVISOR='SUPERVISOR',
+  EMPLOYEE='EMPLOYEE'
 }
 
 registerEnumType(Role, {

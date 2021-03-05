@@ -36,6 +36,7 @@ export class AuthService {
         name: input.name,
         email: input.email,
         password: hashedPassword,
+        role: input.role,
       },
     });
 
@@ -54,20 +55,38 @@ export class AuthService {
     });
   };
 
-  // login = async (input: LoginInput): Promise<UserToken> => {
-  //   const foundUser = await this.lookForUserByEmail(input.email);
-  //   if(!foundUser){
-  //     throw new NotFoundException(`This email is not registered`)
-  //   }
+  login = async (input: LoginInput): Promise<UserToken> => {
+    const foundUser = await this.lookForUserByEmail(input.email);
+    if (!foundUser) {
+      throw new NotFoundException(`This email is not registered`);
+    }
 
-  //   const IsPasswordValid = await this.passwordService.comparePassword(input.password, foundUser.password )
-  //   if(!IsPasswordValid){
-  //     throw new Error('Password is incorrect')
-  //   }
+    const IsPasswordValid = await this.passwordService.comparePassword(
+      input.password,
+      foundUser.password,
+    );
+    if (!IsPasswordValid) {
+      throw new Error('Password is incorrect');
+    }
 
-  //   const jwt = this.jwtService.sign({id: foundUser.id});
+    const jwt = this.jwtService.sign({ id: foundUser.id });
 
-  //   return {user: foundUser, token: jwt}
+    return { user: foundUser, token: jwt };
+  };
 
-  // };
+  permissions = (user: User) => {
+    switch (user.role) {
+      case 'ADMINISTRATOR':
+        return { create: true, read: true, update: true, delete: true };
+        break;
+      case 'MANAGER':
+        return { create: false, read: true, update: true, delete: true };
+        break;
+      case 'SUPERVISOR':
+        return { create: false, read: true, update: true, delete: false };
+        break;
+      case 'EMPLOYEE':
+        return { create: false, read: true, update: false, delete: false };
+    }
+  };
 }

@@ -16,7 +16,6 @@ export class UserService {
   };
 
   getAllUsers = async () => {
-    console.log(await this.prismaService.user.findMany());
     return this.prismaService.user.findMany();
   };
 
@@ -33,15 +32,11 @@ export class UserService {
   };
 
   deleteUserById = async (id: number) => {
-    const deletedUser = this.prismaService.user.delete({
-      where: {
-        id: id,
-      },
-    });
-    //If there's no user throw not found exception
-    if (!deletedUser)
-      throw new NotFoundException(`The user with ID ${id} doesn't exit.`);
-    //Otherwise, retrieve the user deleted
-    return deletedUser;
+      const deletedUser = this.prismaService.user.delete({
+        where: {
+          id: id,
+        },
+      });
+      return deletedUser;
   };
 }

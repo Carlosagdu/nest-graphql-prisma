@@ -15,6 +15,7 @@ import { GraphqlOptions } from './graphql.options';
     PostModule
   ],
   controllers: [],
-  providers: [],
+  providers: [
+  ],
 })
 export class AppModule {}

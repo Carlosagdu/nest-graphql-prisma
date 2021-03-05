@@ -31,7 +31,17 @@ type UserToken {
   user: User!
 }
 
+type Permission {
+  create: Boolean!
+  read: Boolean!
+  update: Boolean!
+  delete: Boolean!
+}
+
 type Query {
+  whoAmI: User!
+  permissionIHave: Permission!
+
   """It returns all registered users"""
   users: [User!]!
 
@@ -50,6 +60,7 @@ type Query {
 
 type Mutation {
   signup(signUpInput: SignUpInput!): UserToken!
+  login(loginInput: LoginInput!): UserToken!
 
   """It deletes a user with specific ID"""
   deleteUser(id: Float!): User
@@ -67,6 +78,12 @@ type Mutation {
 """New User Input"""
 input SignUpInput {
   name: String!
+  email: String!
+  password: String!
+  role: Role
+}
+
+input LoginInput {
   email: String!
   password: String!
 }
