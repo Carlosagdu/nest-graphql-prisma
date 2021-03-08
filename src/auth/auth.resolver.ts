@@ -9,6 +9,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Permission } from './permissions.model';
 import {User} from "src/user/user.model"
 import {CurrentUser} from "./decorator/currentUser.decorator"
+import { RolesGuard } from './guards/roles.guard';
 
 @Resolver('Auth')
 export class AuthResolver {
@@ -18,8 +19,7 @@ export class AuthResolver {
     ) {}
 
   @Mutation((returns) => UserToken)
-  @UsePipes(ValidationPipe)
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   signup(
     @Args('signUpInput') signUpInput: SignUpInput,
   ) {
@@ -28,7 +28,6 @@ export class AuthResolver {
   }
 
   @Mutation((returns) => UserToken)
-  @UsePipes(ValidationPipe)
   login(
     @Args('loginInput') loginInput: LoginInput,
   ) {

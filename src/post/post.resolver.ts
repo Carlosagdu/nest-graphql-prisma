@@ -60,7 +60,6 @@ export class PostResolver {
     description: 'Create a draft for a user',
     nullable: true,
   })
-  @UsePipes(ValidationPipe)
   async createDraft(
     @Args('draftData') draftData: DraftDataInput,
   ): Promise<Post> {
