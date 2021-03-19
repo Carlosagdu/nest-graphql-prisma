@@ -1,5 +1,6 @@
 import {
   Inject,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -12,10 +13,12 @@ import {
   Resolver,
   Root,
 } from '@nestjs/graphql';
-import { User } from '../user/user.model';
-import { Post } from './post.model';
-import {DraftDataInput} from "./dto/draftdata.input"
+import { User } from '../models/user.model';
+import { Post } from '../models/post.model';
+import {PostInput} from "./dto/createPost.input"
 import { PostService } from './post.service';
+import { GqlAuthGuard } from 'src/auth/guards/graphql.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Resolver((of) => Post)
 export class PostResolver {
@@ -45,38 +48,22 @@ export class PostResolver {
     return this.postService.getPostById(id);
   }
 
-  //feed: [Post!]
-  @Query((returns) => [Post], {
-    description: 'It returns all post where published is true',
-    nullable: true,
-  })
-  async feed(): Promise<Post[]> {
-    return this.postService.getPublishedPosts();
-  }
 
   //Mutation resolver
   //createDraft(draftData: DraftDataInput!): Post
   @Mutation((returns) => Post, {
-    description: 'Create a draft for a user',
+    description: 'Create a Post',
     nullable: true,
   })
-  async createDraft(
-    @Args('draftData') draftData: DraftDataInput,
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  async createPost(
+    @Args('postInput') postInput: PostInput,
   ): Promise<Post> {
-    return this.postService.createDraft(
-      draftData.title,
-      draftData.content,
-      draftData.authorEmail,
+    return this.postService.createPost(
+      postInput.title,
+      postInput.body,
+      postInput.authorEmail,
     );
-  }
-
-  //publish(id: Float!): Post
-  @Mutation((returns) => Post, {
-    description: 'Enable the published post property to true',
-    nullable: true,
-  })
-  async publish(@Args('id') id: number): Promise<Post | null> {
-    return this.postService.publish(id);
   }
 
   @Mutation((returns) => Post, {

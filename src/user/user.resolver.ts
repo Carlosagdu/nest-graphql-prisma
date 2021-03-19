@@ -7,14 +7,13 @@ import {
   Resolver,
   Root,
 } from '@nestjs/graphql';
-import { Role, User} from './user.model';
+import { User} from '../models/user.model';
 import {
   Inject, UseGuards
 } from '@nestjs/common';
-import { Post } from 'src/post/post.model';
+import { Post } from 'src/models/post.model';
 import { UserService } from './user.service';
-import { Roles } from 'src/auth/decorator/roles.decorator';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { GqlAuthGuard } from 'src/auth/guards/graphql.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { CurrentUser } from 'src/auth/decorator/currentUser.decorator';
 
@@ -50,8 +49,7 @@ export class UserResolver {
     description: 'It deletes a user with specific ID',
     nullable: true,
   })
-  @UseGuards(JwtAuthGuard,RolesGuard)
-  @Roles(Role.ADMINISTRATOR, Role.MANAGER)
+  @UseGuards(GqlAuthGuard,RolesGuard)
   async deleteUser(@Args('id') id: number) {
     return this.userService.deleteUserById(id);
   }

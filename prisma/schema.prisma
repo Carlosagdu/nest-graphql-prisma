@@ -7,27 +7,88 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  authorId  Int?
-  content   String?
-  id        Int     @id @default(autoincrement())
-  published Boolean @default(false)
-  title     String
-  author    User?   @relation(fields: [authorId], references: [id])
-}
-
 model User {
-  email    String  @unique
-  id       Int     @id @default(autoincrement())
-  name     String?
-  password String
-  role     Role    @default(ADMINISTRATOR)
-  posts    Post[]
+  id          Int          @id @default(autoincrement())
+  email       String?      @unique
+  password    String?
+  posts       Post[]
+  User_roles  User_roles?
+  Permissions Permissions?
+  menu        menu?
 }
 
-enum Role {
-  ADMINISTRATOR
-  MANAGER
-  SUPERVISOR
-  EMPLOYEE
+model Roles {
+  id          Int            @id @default(autoincrement())
+  name        String?        @unique
+  description String
+  state       Boolean?
+  User_roles  User_roles[]
+  Rutas_roles Routes_roles[]
+}
+
+model User_roles {
+  id     Int      @id @default(autoincrement())
+  user   User?    @relation(fields: [userId], references: [id])
+  userId Int?
+  roles  Roles?   @relation(fields: [roleId], references: [id])
+  roleId Int?
+  state  Boolean?
+}
+
+model Route {
+  id          Int            @id @default(autoincrement())
+  route       String?        @unique
+  state       Boolean?
+  Rutas_roles Routes_roles[]
+}
+
+model Routes_roles {
+  id      Int      @id @default(autoincrement())
+  routes  Route?   @relation(fields: [routeId], references: [id])
+  routeId Int?
+  roles   Roles?   @relation(fields: [roleId], references: [id])
+  roleId  Int?
+  state   Boolean?
+}
+
+model Post {
+  id       Int     @id @default(autoincrement())
+  title    String?
+  body     String
+  author   User?   @relation(fields: [authorId], references: [id])
+  authorId Int?
+}
+
+model Permissions {
+  id     Int      @id @default(autoincrement())
+  access String[]
+  user   User     @relation(fields: [userId], references: [id])
+  userId Int
+}
+
+model menu {
+  id           Int           @id @default(autoincrement())
+  menuSections menuSection[]
+  user         User?         @relation(fields: [userId], references: [id])
+  userId       Int?
+}
+
+model menuSection {
+  id      Int      @id @default(autoincrement())
+  title   String
+  members member[]
+  menu    menu?    @relation(fields: [menuId], references: [id])
+  menuId  Int?
+}
+
+model member {
+  id            Int          @id @default(autoincrement())
+  name          String
+  menuSection   menuSection? @relation(fields: [menuSectionId], references: [id])
+  menuSectionId Int?
+}
+
+model globalMenu {
+  id     Int      @id @default(autoincrement())
+  entity String[]
 }

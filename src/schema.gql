@@ -2,45 +2,67 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""Post model"""
 type Post {
   id: ID!
   title: String!
-  content: String
-  published: Boolean
+  body: String
   author: User
 }
 
+"""User model"""
 type User {
   id: ID!
   email: String!
-  name: String
   posts: [Post!]
-  role: Role!
 }
 
-"""Allowed roles for users"""
-enum Role {
-  ADMINISTRATOR
-  MANAGER
-  SUPERVISOR
-  EMPLOYEE
-}
-
+"""UserToken model"""
 type UserToken {
   token: String!
   user: User!
 }
 
+"""Permission model"""
 type Permission {
-  create: Boolean!
-  read: Boolean!
-  update: Boolean!
-  delete: Boolean!
+  id: ID!
+  access: [String!]!
+  user: User!
+}
+
+"""Role model"""
+type Roles {
+  id: ID!
+  name: String!
+  description: String
+  state: Boolean!
+}
+
+"""UserRoles model"""
+type UserRoles {
+  id: ID!
+  user: User!
+  roles: Roles!
+  state: Boolean!
+}
+
+"""Route model"""
+type Route {
+  id: ID!
+  route: String!
+  state: Boolean!
+}
+
+"""RoutesRoles model"""
+type RoutesRoles {
+  id: ID!
+  route: Route!
+  roles: Roles!
+  state: Boolean!
 }
 
 type Query {
   whoAmI: User!
-  permissionIHave: Permission!
 
   """It returns all registered users"""
   users: [User!]!
@@ -53,9 +75,12 @@ type Query {
 
   """get post by Id"""
   post(id: Float!): Post
-
-  """It returns all post where published is true"""
-  feed: [Post!]
+  permissions: [Permission!]!
+  permissionById(id: Float!): Permission!
+  roles: [Roles!]!
+  userRoles: [UserRoles!]!
+  routes: [Route!]!
+  routesRoles: [RoutesRoles!]!
 }
 
 type Mutation {
@@ -65,22 +90,22 @@ type Mutation {
   """It deletes a user with specific ID"""
   deleteUser(id: Float!): User
 
-  """Create a draft for a user"""
-  createDraft(draftData: DraftDataInput!): Post
-
-  """Enable the published post property to true"""
-  publish(id: Float!): Post
+  """Create a Post"""
+  createPost(postInput: PostInput!): Post
 
   """It deletes a post with specific ID"""
   deletePostById(id: Float!): Post
+  assignPermissionToUser(userId: Float!): Permission!
+  createRole(roleInput: RoleInput!): Roles!
+  connectUserRole(roleId: Float!, userId: Float!): UserRoles!
+  createRoute(routeInput: RouteInput!): Route!
+  connectRoutesRoles(roleId: Float!, routeId: Float!): RoutesRoles!
 }
 
 """New User Input"""
 input SignUpInput {
-  name: String!
   email: String!
   password: String!
-  role: Role
 }
 
 input LoginInput {
@@ -88,9 +113,21 @@ input LoginInput {
   password: String!
 }
 
-"""New Draft Input"""
-input DraftDataInput {
+"""New post input"""
+input PostInput {
   title: String!
-  content: String!
+  body: String!
   authorEmail: String!
+}
+
+"""Create role input"""
+input RoleInput {
+  name: String!
+  description: String!
+  state: Boolean!
+}
+
+input RouteInput {
+  route: String!
+  state: Boolean!
 }

@@ -1,13 +1,12 @@
 import { Resolver, Mutation, Args, Context, Query } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
-import { UserToken } from './userToken.model';
+import { UserToken } from '../models/userToken.model';
 import { SignUpInput } from './dto/signup.input';
 import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { LoginInput } from './dto/login.input';
 import { UserService } from 'src/user/user.service';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { Permission } from './permissions.model';
-import {User} from "src/user/user.model"
+import { GqlAuthGuard } from './guards/graphql.guard';
+import {User} from "src/models/user.model"
 import {CurrentUser} from "./decorator/currentUser.decorator"
 import { RolesGuard } from './guards/roles.guard';
 
@@ -19,7 +18,7 @@ export class AuthResolver {
     ) {}
 
   @Mutation((returns) => UserToken)
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  // @UseGuards(GqlAuthGuard, RolesGuard)
   signup(
     @Args('signUpInput') signUpInput: SignUpInput,
   ) {
@@ -35,14 +34,9 @@ export class AuthResolver {
   }
 
   @Query(returns => User)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(GqlAuthGuard)
   whoAmI(@CurrentUser() user: User){
     return this.userService.getUserById(user.id)
   }
 
-  @Query(returns => Permission)
-  @UseGuards(JwtAuthGuard)
-  permissionIHave(@CurrentUser() user: User){
-    return this.authService.permissions(user)
-  }
 }

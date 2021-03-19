@@ -7,9 +7,9 @@ import { PrismaService } from 'src/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { SignUpInput } from './dto/signup.input';
 import { PasswordService } from './password.service';
-import { UserToken } from './userToken.model';
+import { UserToken } from '../models/userToken.model';
 import { LoginInput } from './dto/login.input';
-import { User } from 'src/user/user.model';
+import { User } from 'src/models/user.model';
 
 @Injectable()
 export class AuthService {
@@ -33,10 +33,8 @@ export class AuthService {
 
     const createdUser = await this.prismaService.user.create({
       data: {
-        name: input.name,
         email: input.email,
         password: hashedPassword,
-        role: input.role,
       },
     });
 
@@ -74,19 +72,4 @@ export class AuthService {
     return { user: foundUser, token: jwt };
   };
 
-  permissions = (user: User) => {
-    switch (user.role) {
-      case 'ADMINISTRATOR':
-        return { create: true, read: true, update: true, delete: true };
-        break;
-      case 'MANAGER':
-        return { create: false, read: true, update: true, delete: true };
-        break;
-      case 'SUPERVISOR':
-        return { create: false, read: true, update: true, delete: false };
-        break;
-      case 'EMPLOYEE':
-        return { create: false, read: true, update: false, delete: false };
-    }
-  };
 }

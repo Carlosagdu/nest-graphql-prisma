@@ -3,7 +3,7 @@ import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class PostService {
-    constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
+  constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
 
   authorField = async (postId: number) => {
     return this.prismaService.post
@@ -31,23 +31,11 @@ export class PostService {
     return foundPost;
   };
 
-  getPublishedPosts = async () => {
-    const foundPosts = await this.prismaService.post.findMany({
-      where: {
-        published: true,
-      },
-    });
-    //If there aren´t published posts throw not found exception
-    if (!foundPosts) throw new NotFoundException('Published posts not found');
-    //Otherwise, return the found Posts
-    return foundPosts;
-  };
-
-  createDraft = async (title: string, content: string, authorEmail: string) => {
+  createPost = async (title: string, body: string, authorEmail: string) => {
     return this.prismaService.post.create({
       data: {
         title: title,
-        content: content,
+        body: body,
         author: {
           connect: { email: authorEmail },
         },
@@ -55,22 +43,11 @@ export class PostService {
     });
   };
 
-  publish = async (postId: number) => {
-    return this.prismaService.post.update({
+  deletePostById = async (postId: number) => {
+    return this.prismaService.post.delete({
       where: {
         id: postId,
       },
-      data: {
-        published: true,
-      },
     });
   };
-
-  deletePostById = async (postId: number) => {
-    return this.prismaService.post.delete({
-        where: {
-          id: postId,
-        },
-      });
-  }
 }

@@ -1,8 +1,8 @@
 import { Field, ObjectType} from '@nestjs/graphql';
 import { User } from '@prisma/client';
-import { User as UserModel } from 'src/user/user.model';
+import { User as UserModel } from 'src/models/user.model';
 
-@ObjectType()
+@ObjectType({description:"UserToken model"})
 export class UserToken {
   @Field()
   token: string
