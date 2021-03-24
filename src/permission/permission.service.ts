@@ -28,7 +28,7 @@ export class PermissionService {
   };
 
   assignPermissionToUser = async (userId: number) => {
-    // Check if current user has a menu
+    // Check if current user has permissions
     const permissionId = await this.prismaService.user.findUnique({
       where: {
         id: userId,
@@ -125,21 +125,3 @@ export class PermissionService {
     });
   };
 }
-
-// {
-//   $agrupacion1:['entidad1', 'entidad2','entidad3'],
-//   $agrupacion2:['entidadN','entidadX],
-//   ...: ...
-// }
-
-// type aggrupationMenu{
-//   id: integer
-//   title: String
-//   member: [member!]
-// }
-
-// type member{
-//   id: integer
-//   name: String
-//   aggrupationId: aggrupationMenu.id
-// }

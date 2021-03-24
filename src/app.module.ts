@@ -12,6 +12,7 @@ import { RouteModule } from './route/route.module';
 import { RoutesRolesModule } from './routes-roles/routes-roles.module';
 import { GlobalMenuInterceptor } from './interceptors/globalMenu.interceptor';
 import { PrismaService } from './prisma.service';
+import { MenuModule } from './menu/menu.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { PrismaService } from './prisma.service';
     UserRolesModule,
     RouteModule,
     RoutesRolesModule,
+    MenuModule,
   ],
   controllers: [],
   providers: [

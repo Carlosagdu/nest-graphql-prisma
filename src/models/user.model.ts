@@ -1,4 +1,3 @@
-import 'reflect-metadata'
 import { ObjectType, Field, ID, HideField} from '@nestjs/graphql'
 import { Post } from "./post.model"
 
