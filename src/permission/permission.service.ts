@@ -15,16 +15,14 @@ export class PermissionService {
       .user();
   };
 
-  getAllPermissions = async () => {
-    return this.prismaService.permissions.findMany();
-  };
-
-  getPermissionById = async (id: number) => {
-    return this.prismaService.permissions.findUnique({
-      where: {
-        id: id,
-      },
-    });
+  getPermissionByUserId = async (userId: number) => {
+    return this.prismaService.user
+      .findUnique({
+        where: {
+          id: userId,
+        },
+      })
+      .Permissions();
   };
 
   assignPermissionToUser = async (userId: number) => {
@@ -76,7 +74,7 @@ export class PermissionService {
       }
     });
 
-    let accessTo = []
+    let accessTo = [];
     for (let i = 0; i < resolversName.length; i++) {
       // let CRUDmethods = [];
       // for (let y = 0; y < enabledRoutes.length; y++) {
@@ -90,21 +88,21 @@ export class PermissionService {
       // };
       accessTo.push(resolversName[i]);
     }
-    // If this user does not have a menu associated
+    // If this user does not have a permissions associated
     // we're going to create it
-    if(!permissionId.Permissions){
+    if (!permissionId.Permissions) {
       return this.prismaService.permissions.create({
-        data:{
+        data: {
           access: accessTo,
-          user:{
-            connect:{
-              id: userId
-            }
-          }
-        }
-      })
+          user: {
+            connect: {
+              id: userId,
+            },
+          },
+        },
+      });
     }
-    
+
     // Otherwise, we update the menu associated
     // to the user
     return this.prismaService.permissions.upsert({

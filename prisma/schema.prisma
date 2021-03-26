@@ -92,3 +92,13 @@ model globalMenu {
   id     Int      @id @default(autoincrement())
   entity String[]
 }
+
+model treeMenu {
+  id         Int        @id @default(autoincrement())
+  title      String
+  path       String
+  isEntity   Boolean
+  subMenu    treeMenu[] @relation("treeMenuTotreeMenu")
+  treeMenu   treeMenu?  @relation("treeMenuTotreeMenu", fields: [treeMenuId], references: [id])
+  treeMenuId Int?
+}

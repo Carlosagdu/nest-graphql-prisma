@@ -101,7 +101,7 @@ export class MenuService {
       });
     if (!availableEntities.access.includes(member)) {
       throw new UnauthorizedException(
-        `User doesn't have access to this entity`,
+        `User doesn't have access to the ${member} entity`,
       );
     }
     // Save the member to the menusection
