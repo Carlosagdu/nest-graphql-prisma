@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["groupBy"]
 }
 
 datasource db {
@@ -15,7 +14,6 @@ model User {
   posts       Post[]
   User_roles  User_roles?
   Permissions Permissions?
-  menu        menu?
 }
 
 model Roles {
@@ -65,33 +63,6 @@ model Permissions {
   access String[]
   user   User     @relation(fields: [userId], references: [id])
   userId Int
-}
-
-model menu {
-  id           Int           @id @default(autoincrement())
-  menuSections menuSection[]
-  user         User?         @relation(fields: [userId], references: [id])
-  userId       Int?
-}
-
-model menuSection {
-  id      Int      @id @default(autoincrement())
-  title   String
-  members member[]
-  menu    menu?    @relation(fields: [menuId], references: [id])
-  menuId  Int?
-}
-
-model member {
-  id            Int          @id @default(autoincrement())
-  name          String
-  menuSection   menuSection? @relation(fields: [menuSectionId], references: [id])
-  menuSectionId Int?
-}
-
-model globalMenu {
-  id     Int      @id @default(autoincrement())
-  entity String[]
 }
 
 model treeMenu {

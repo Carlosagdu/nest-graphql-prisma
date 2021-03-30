@@ -1,8 +1,8 @@
-import { Resolver, Mutation, Args, Context, Query } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { UserToken } from '../models/userToken.model';
 import { SignUpInput } from './dto/signup.input';
-import { UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { UseGuards} from '@nestjs/common';
 import { LoginInput } from './dto/login.input';
 import { UserService } from 'src/user/user.service';
 import { GqlAuthGuard } from './guards/graphql.guard';

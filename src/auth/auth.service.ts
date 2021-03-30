@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -9,13 +10,12 @@ import { SignUpInput } from './dto/signup.input';
 import { PasswordService } from './password.service';
 import { UserToken } from '../models/userToken.model';
 import { LoginInput } from './dto/login.input';
-import { User } from 'src/models/user.model';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly passwordService: PasswordService,
-    private readonly prismaService: PrismaService,
+    @Inject(PrismaService) private prismaService: PrismaService,
     private readonly jwtService: JwtService,
   ) {}
 

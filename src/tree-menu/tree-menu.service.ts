@@ -158,11 +158,23 @@ export class TreeMenuService {
             id: true,
             title: true,
             path: true,
+            isEntity: true,
             subMenu: {
+              where: {
+                OR: [
+                  {
+                    title:{
+                      in: permissions[0].access
+                    }
+                  },
+                  { isEntity: false }
+                ],
+              },
               select: {
                 id: true,
                 title: true,
                 path: true,
+                isEntity: true,
                 subMenu: {
                   where: {
                     title: { in: permissions[0].access },

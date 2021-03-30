@@ -4,16 +4,14 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
 import { GraphqlOptions } from './graphql.options';
-import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_PIPE } from '@nestjs/core';
 import { PermissionModule } from './permission/permission.module';
 import { RolesModule } from './roles/roles.module';
 import { UserRolesModule } from './user-roles/user-roles.module';
 import { RouteModule } from './route/route.module';
 import { RoutesRolesModule } from './routes-roles/routes-roles.module';
-import { GlobalMenuInterceptor } from './interceptors/globalMenu.interceptor';
-import { PrismaService } from './prisma.service';
-import { MenuModule } from './menu/menu.module';
 import { TreeMenuModule } from './tree-menu/tree-menu.module';
+import { PrismaService } from './prisma.service';
 
 @Module({
   imports: [
@@ -28,7 +26,6 @@ import { TreeMenuModule } from './tree-menu/tree-menu.module';
     UserRolesModule,
     RouteModule,
     RoutesRolesModule,
-    MenuModule,
     TreeMenuModule,
   ],
   controllers: [],
@@ -36,10 +33,6 @@ import { TreeMenuModule } from './tree-menu/tree-menu.module';
     {
       provide: APP_PIPE,
       useClass: ValidationPipe
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: GlobalMenuInterceptor
     },
     PrismaService
   ],
