@@ -6,12 +6,12 @@ import { TreeMenuService } from './tree-menu.service';
 export class TreeMenuResolver {
   constructor(private readonly treeMenuService: TreeMenuService) {}
 
-  @ResolveField()
-  async subMenu(@Root()treeMenu: TreeMenu){
-    return this.treeMenuService.subMenuField(treeMenu.id)
-  }
+  // @ResolveField()
+  // async subMenu(@Root()treeMenu: TreeMenu){
+  //   return this.treeMenuService.subMenuField(treeMenu.id)
+  // }
 
-  @Query((returns) => TreeMenu)
+  @Query(returns => TreeMenu)
   async treeMenusById(@Args('menuId')menuId: number) {
     return this.treeMenuService.getTreeMenuById(menuId);
   }
@@ -27,5 +27,20 @@ export class TreeMenuResolver {
     @Args('folderName')folderName: string
   ){
     return this.treeMenuService.createFolder(parentId, folderName)
+  }
+
+  @Mutation(returns => TreeMenu)
+  async insertEntityToFolder(
+    @Args('parentId')parentId: number,
+    @Args('entityName')entityName: string
+    ){
+    return this.treeMenuService.insertEntityToFolder(parentId, entityName)
+  }
+
+  @Query(returns => TreeMenu)
+  async filteredMenuForUserId(
+    @Args('userId')userId: number
+  ){
+    return this.treeMenuService.filterMenu(userId)
   }
 }

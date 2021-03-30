@@ -104,6 +104,7 @@ type Query {
   menus: [Menu!]!
   menuByUserId(userId: Float!): Menu!
   treeMenusById(menuId: Float!): TreeMenu!
+  filteredMenuForUserId(userId: Float!): TreeMenu!
 }
 
 type Mutation {
@@ -128,6 +129,7 @@ type Mutation {
   insertMember(members: String!, sectionId: Float!, userId: Float!): Menu!
   createRootMenu: TreeMenu!
   createFolder(folderName: String!, parentId: Float!): TreeMenu!
+  insertEntityToFolder(entityName: String!, parentId: Float!): TreeMenu!
 }
 
 """New User Input"""

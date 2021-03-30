@@ -1,41 +1,62 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { checkValidationErrors } from 'graphql-tools';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class TreeMenuService {
   constructor(private prismaService: PrismaService) {}
 
-  subMenuField = async (treeMenuId: number) => {
-    return this.prismaService.treeMenu
-      .findUnique({
-        where: {
-          id: treeMenuId,
-        },
-      })
-      .subMenu();
-  };
+  // subMenuField = async (treeMenuId: number) => {
+  //   return this.prismaService.treeMenu
+  //     .findUnique({
+  //       where: {
+  //         id: treeMenuId,
+  //       },
+  //     })
+  //     .subMenu({
+  //       select: {
+  //         title: true,
+  //         path: true,
+  //         isEntity: true,
+  //         subMenu: {
+  //           select: {
+  //             title: true,
+  //             path: true,
+  //             subMenu: true,
+  //           },
+  //         },
+  //       },
+  //     });
+  // };
 
   getTreeMenuById = async (menuId: number) => {
-    const menu = await this.prismaService.treeMenu.findUnique({
+    return await this.prismaService.treeMenu.findUnique({
       where: {
         id: menuId,
       },
-      select:{
-        id: true,
-        title: true,
-        path: true,
-        isEntity: true,
-        subMenu: true,
-      }
+      include: {
+        subMenu: {
+          include: {
+            subMenu: {
+              include: {
+                subMenu: {
+                  include: {
+                    subMenu: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     });
-    return menu
   };
 
   createRootMenu = async () => {
     return this.prismaService.treeMenu.create({
       data: {
         title: 'menu',
-        path: '',
+        path: '/',
         isEntity: false,
         treeMenuId: null,
       },
@@ -57,9 +78,23 @@ export class TreeMenuService {
       },
     });
 
-    const folderNameWithSlash: string = '/' + folderName
+    return await this.updateFolderPath(createdFolder.id, folderName);
+  };
 
-    return await this.updateFolderPath(createdFolder.id, folderNameWithSlash);
+  insertEntityToFolder = async (parentId: number, entityName: string) => {
+    const createdEntity = await this.prismaService.treeMenu.create({
+      data: {
+        title: entityName,
+        isEntity: true,
+        path: '',
+        treeMenu: {
+          connect: {
+            id: parentId,
+          },
+        },
+      },
+    });
+    return await this.updateFolderPath(createdEntity.id, entityName);
   };
 
   doesParentFolderExist = async (parentId: number) => {
@@ -74,6 +109,7 @@ export class TreeMenuService {
   };
 
   updateFolderPath = async (folderId: number, folderName: string) => {
+    let path: string;
     const parent = await this.prismaService.treeMenu
       .findUnique({
         where: {
@@ -85,7 +121,11 @@ export class TreeMenuService {
           path: true,
         },
       });
-    const path: string = parent.path + folderName;
+    if (parent.path === '/') {
+      path = parent.path + folderName;
+    } else {
+      path = parent.path + '/' + folderName;
+    }
     return await this.prismaService.treeMenu.update({
       where: {
         id: folderId,
@@ -95,4 +135,61 @@ export class TreeMenuService {
       },
     });
   };
+
+  filterMenu = async (userId: number) => {
+    const permissions = await this.prismaService.permissions.findMany({
+      where: {
+        userId: userId,
+      },
+      select: {
+        access: true,
+      },
+    });
+    const filteredMenu = await this.prismaService.treeMenu.findUnique({
+      where: {
+        id: 1,
+      },
+      select: {
+        id: true,
+        title: true,
+        path: true,
+        subMenu: {
+          select: {
+            id: true,
+            title: true,
+            path: true,
+            subMenu: {
+              select: {
+                id: true,
+                title: true,
+                path: true,
+                subMenu: {
+                  where: {
+                    title: { in: permissions[0].access },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+    return filteredMenu;
+  };
+
+  // loopSubMenu = (submenu: any[], itemToLook: string) => {
+  //   const getNodes = (result, currentObject) => {
+  //     if (currentObject.title === itemToLook) {
+  //       result.push(currentObject);
+  //     }
+  //     if (Array.isArray(currentObject.subMenu==[])) {
+  //       const subMenu = currentObject.subMenu.reduce(getNodes, []);
+  //       if (subMenu.length == []) {
+  //         result.push({ ...currentObject, submenu });
+  //       }
+  //     }
+  //     return result;
+  //   };
+  //   return submenu.reduce(getNodes, []);
+  // };
 }

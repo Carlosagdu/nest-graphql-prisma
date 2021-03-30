@@ -76,16 +76,6 @@ export class PermissionService {
 
     let accessTo = [];
     for (let i = 0; i < resolversName.length; i++) {
-      // let CRUDmethods = [];
-      // for (let y = 0; y < enabledRoutes.length; y++) {
-      //   if (enabledRoutes[y].startsWith(resolversName[i])) {
-      //     CRUDmethods.push(enabledRoutes[y].split('/')[1]);
-      //   }
-      // }
-      // let obj = {
-      //   resolverName: resolversName[i],
-      //   // methods: CRUDmethods,
-      // };
       accessTo.push(resolversName[i]);
     }
     // If this user does not have a permissions associated
