@@ -6,33 +6,10 @@ import { PrismaService } from 'src/prisma.service';
 export class TreeMenuService {
   constructor(private prismaService: PrismaService) {}
 
-  // subMenuField = async (treeMenuId: number) => {
-  //   return this.prismaService.treeMenu
-  //     .findUnique({
-  //       where: {
-  //         id: treeMenuId,
-  //       },
-  //     })
-  //     .subMenu({
-  //       select: {
-  //         title: true,
-  //         path: true,
-  //         isEntity: true,
-  //         subMenu: {
-  //           select: {
-  //             title: true,
-  //             path: true,
-  //             subMenu: true,
-  //           },
-  //         },
-  //       },
-  //     });
-  // };
-
-  getTreeMenuById = async (menuId: number) => {
-    return await this.prismaService.treeMenu.findUnique({
+  rootTreeMenu = async () => {
+    return await this.prismaService.treeMenu.findFirst({
       where: {
-        id: menuId,
+        treeMenuId: null
       },
       include: {
         subMenu: {

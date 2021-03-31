@@ -94,7 +94,7 @@ type Query {
   userRoles: [UserRoles!]!
   routes: [Route!]!
   routesRoles: [RoutesRoles!]!
-  treeMenusById(menuId: Float!): TreeMenu!
+  rootTreeMenu: TreeMenu!
   filteredMenuForUserId(userId: Float!): TreeMenu!
 }
 

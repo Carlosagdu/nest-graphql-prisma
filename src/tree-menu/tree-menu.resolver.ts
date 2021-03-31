@@ -6,14 +6,9 @@ import { TreeMenuService } from './tree-menu.service';
 export class TreeMenuResolver {
   constructor(private readonly treeMenuService: TreeMenuService) {}
 
-  // @ResolveField()
-  // async subMenu(@Root()treeMenu: TreeMenu){
-  //   return this.treeMenuService.subMenuField(treeMenu.id)
-  // }
-
   @Query(returns => TreeMenu)
-  async treeMenusById(@Args('menuId')menuId: number) {
-    return this.treeMenuService.getTreeMenuById(menuId);
+  async rootTreeMenu() {
+    return this.treeMenuService.rootTreeMenu();
   }
 
   @Mutation(returns => TreeMenu)
