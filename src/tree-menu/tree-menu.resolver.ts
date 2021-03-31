@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
-import { TreeMenu } from 'src/models/treeMenu.model';
+import { TreeMenu } from '../models/treeMenu.model';
 import { TreeMenuService } from './tree-menu.service';
 
 @Resolver(TreeMenu)

@@ -1,18 +1,18 @@
+import { treeMenu } from '.prisma/client';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { checkValidationErrors } from 'graphql-tools';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class TreeMenuService {
   constructor(private prismaService: PrismaService) {}
 
-  rootTreeMenu = async () => {
+  rootTreeMenu = async ()=> {
     return await this.prismaService.treeMenu.findFirst({
       where: {
         treeMenuId: null
       },
       include: {
-        subMenu: {
+        subMenu:{
           include: {
             subMenu: {
               include: {
@@ -113,7 +113,7 @@ export class TreeMenuService {
     });
   };
 
-  filterMenu = async (userId: number) => {
+  filterMenu = async (userId: number): Promise<treeMenu> => {
     const permissions = await this.prismaService.permissions.findMany({
       where: {
         userId: userId,
@@ -130,6 +130,8 @@ export class TreeMenuService {
         id: true,
         title: true,
         path: true,
+        isEntity: true,
+        treeMenuId: true,
         subMenu: {
           select: {
             id: true,
