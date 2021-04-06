@@ -167,20 +167,4 @@ export class TreeMenuService {
     });
     return filteredMenu;
   };
-
-  // loopSubMenu = (submenu: any[], itemToLook: string) => {
-  //   const getNodes = (result, currentObject) => {
-  //     if (currentObject.title === itemToLook) {
-  //       result.push(currentObject);
-  //     }
-  //     if (Array.isArray(currentObject.subMenu==[])) {
-  //       const subMenu = currentObject.subMenu.reduce(getNodes, []);
-  //       if (subMenu.length == []) {
-  //         result.push({ ...currentObject, submenu });
-  //       }
-  //     }
-  //     return result;
-  //   };
-  //   return submenu.reduce(getNodes, []);
-  // };
 }
